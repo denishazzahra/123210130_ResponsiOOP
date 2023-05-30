@@ -66,7 +66,6 @@ public class AlMaulModel extends Connector implements PriceInterface {
     public void insertRent(String name,String id, String contact, int duration, String room){
         try{
             String query="INSERT INTO renter VALUES('"+name+"','"+id+"','"+contact+"','"+duration+"','"+getPrice(room,duration)+"', 'notPaid','"+room+"')";
-            System.out.println(query);
             statement=connection.createStatement();
             statement.executeUpdate(query);
             JOptionPane.showMessageDialog(null,"Booking success!");
