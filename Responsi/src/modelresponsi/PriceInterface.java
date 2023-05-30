@@ -10,5 +10,5 @@ package modelresponsi;
  * @author LENOVO
  */
 public interface PriceInterface {
-    public int getPrice(String room);
+    public int getPrice(String room,int duration);
 }

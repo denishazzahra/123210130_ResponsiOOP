@@ -65,7 +65,7 @@ public class AlMaulModel extends Connector implements PriceInterface {
     }
     public void insertRent(String name,String id, String contact, int duration, String room){
         try{
-            String query="INSERT INTO renter VALUES('"+name+"','"+id+"','"+contact+"','"+duration+"','"+duration*getPrice(room)+"', 'notPaid','"+room+"')";
+            String query="INSERT INTO renter VALUES('"+name+"','"+id+"','"+contact+"','"+duration+"','"+getPrice(room,duration)+"', 'notPaid','"+room+"')";
             System.out.println(query);
             statement=connection.createStatement();
             statement.executeUpdate(query);
@@ -75,14 +75,14 @@ public class AlMaulModel extends Connector implements PriceInterface {
         }
     }
     @Override
-    public int getPrice(String room){
+    public int getPrice(String room,int duration){
         int price=0;
         try{
             String query="SELECT price from rooms where name='"+room+"'";
             statement=connection.createStatement();
             ResultSet rs=statement.executeQuery(query);
             while(rs.next()){
-                price=Integer.parseInt(rs.getString("price"));
+                price=Integer.parseInt(rs.getString("price"))*duration;
             }
             
         }catch(Exception e){
@@ -141,20 +141,38 @@ public class AlMaulModel extends Connector implements PriceInterface {
     }
     public void updateStatus(String name,String id, String room){
         try{
-            String query="UPDATE renter set status='Paid' where id='"+id+"'";
-            statement=connection.createStatement();
-            statement.executeUpdate(query);
-            String query1="UPDATE rooms set status='"+name+"' where name='"+room+"'";
-            statement=connection.createStatement();
-            statement.executeUpdate(query1);
-            JOptionPane.showMessageDialog(null, "Update status success!");
+            if(checkAvailable(room)){
+                String query="UPDATE renter set status='Paid' where id='"+id+"'";
+                statement=connection.createStatement();
+                statement.executeUpdate(query);
+                String query1="UPDATE rooms set status='"+name+"' where name='"+room+"'";
+                statement=connection.createStatement();
+                statement.executeUpdate(query1);
+                JOptionPane.showMessageDialog(null, "Update status success!");
+            }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Update status failed!");
         }
     }
+    public boolean checkAvailable(String room){
+        try{
+            String query="SELECT status from rooms where name='"+room+"'";
+            statement=connection.createStatement();
+            ResultSet rs=statement.executeQuery(query);
+            while(rs.next()){
+                if(rs.getString("status").equals("empty")){
+                    return true;
+                }
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Checking failed!");
+        }
+        JOptionPane.showMessageDialog(null,"Room is occupied! Please wait until the room is available.");
+        return false;
+    }
     public void editRent(String name, String id, String contact, int duration,String room, String oldID){
         try{
-            String query="UPDATE renter set name='"+name+"', id='"+id+"', contact='"+contact+"', duration='"+duration+"', bill='"+duration*getPrice(room)+"' where id='"+oldID+"'";
+            String query="UPDATE renter set name='"+name+"', id='"+id+"', contact='"+contact+"', duration='"+duration+"', bill='"+getPrice(room,duration)+"' where id='"+oldID+"'";
             statement=connection.createStatement();
             statement.executeUpdate(query);
             JOptionPane.showMessageDialog(null, "Edit rent success!");
