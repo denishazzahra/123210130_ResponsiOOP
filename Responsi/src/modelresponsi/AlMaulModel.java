@@ -11,7 +11,7 @@ import java.sql.*;
  *
  * @author LENOVO
  */
-public class AlMaulModel extends Connector {
+public class AlMaulModel extends Connector implements PriceInterface {
     public String checkLogin(String user, String pass){
         try{
             String query="SELECT role from accounts where username='"+user+"' and password='"+pass+"'";
@@ -74,6 +74,7 @@ public class AlMaulModel extends Connector {
             JOptionPane.showMessageDialog(null,"Insert failed!");
         }
     }
+    @Override
     public int getPrice(String room){
         int price=0;
         try{
