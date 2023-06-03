@@ -5,3 +5,4 @@ revisi:
           -ada salah di implementasi interface, awalnya method itu cuma ngambil harga dr database terus dikaliinnya diluar, sekarang udah didalem semua
           -kalo ada 2 user booking kamar yg sama (yg pertama blm bayar jd masih empty di tabel, bisa dibooking dr user) terus salah satunya bayar, satunya jadi gabisa bayar.
           -sblmnya ada query yg keprint bekas debugging, skrg dh diapus aowkaowkawok
+          -login lupa dikasih binary di password
