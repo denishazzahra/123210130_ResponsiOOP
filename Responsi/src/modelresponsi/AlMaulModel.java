@@ -14,7 +14,7 @@ import java.sql.*;
 public class AlMaulModel extends Connector implements PriceInterface {
     public String checkLogin(String user, String pass){
         try{
-            String query="SELECT role from accounts where username='"+user+"' and password='"+pass+"'";
+            String query="SELECT role from accounts where username='"+user+"' and password=BINARY '"+pass+"'";
             statement=connection.createStatement();
             ResultSet rs=statement.executeQuery(query);
             while(rs.next()){
